@@ -22,7 +22,7 @@ app.use(function(req, res, next){
 
 //Error Handler: (note 4 params)
 app.use(function (err, req, res, next) {
-	res.status(err.status || 500); //500/undefined if internal server
+	res.status(err.status || 500); //undefined means a 500, aka internal server
 	res.json({
 		error: {
 			message: err.message
