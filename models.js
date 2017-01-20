@@ -12,6 +12,21 @@ var AnswerSchema = new Schema({
 	votes: {type: Number, default: 0}
 });
 
+//add new method
+AnswerSchema.method('update', function(updates, callback) {
+	Object.assign(this, updates, {updatedAt: new Date()});
+	this.parent().save(callback);
+});
+
+AnswerSchema.method('vote', function(vote, callback){
+	if (vote === 'up') {
+		this.votes += 1;
+	} else {
+		this.votes -=1;
+	}
+	this.parent().save(callback);
+});
+
 var QuestionSchema = new Schema({
 	text: String,
 	createdAt: {type: Date, default: Date.now},  //set to current date and time
