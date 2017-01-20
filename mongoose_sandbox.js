@@ -1,10 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose');
-
 mongoose.connect('mongodb://localhost:27017/sandbox');
-
-
 var db = mongoose.connection;
 
 // listen for events on mongoose connection:
@@ -39,6 +36,11 @@ db.once('open', function () {
 		}
 		next();
 	});
+
+	//Create custom static method:
+	AnimalSchema.statics.findSmall = function(callback) {
+		return this.find({size: 'small'}, callback);
+	}
 
 	//create model based on schema, first param is name (traditionally plural, maps to document in database), second is schema
 	var Animal = mongoose.model('Animals', AnimalSchema);
@@ -94,7 +96,7 @@ db.once('open', function () {
 		Animal.create(animalData, function (err, animals) {
 			if (err) console.error('Save Failed', err);
 			//query the db:
-			Animal.find({}, function(err, animals) {
+			Animal.findSmall(function(err, animals) {
 				animals.forEach(function(animal) {
 					console.log(animal.name + " the " + animal.color + " " + animal.type + ' is a ' + animal.size + '-sized animal.' );
 				});
