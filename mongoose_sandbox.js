@@ -28,7 +28,7 @@ db.once('open', function () {
 	});
 
 	//Create custom pre-hook for the save function:
-	AnimalScheme.pre('save', function(next){
+	AnimalSchema.pre('save', function(next){
 		//this refers to document being saved:
 		if (this.mass >= 100) {
 			this.size = 'big';
@@ -94,9 +94,9 @@ db.once('open', function () {
 		Animal.create(animalData, function (err, animals) {
 			if (err) console.error('Save Failed', err);
 			//query the db:
-			Animal.find({size: 'big'}, function(err, animals) {
+			Animal.find({}, function(err, animals) {
 				animals.forEach(function(animal) {
-					console.log(animal.name + " the " + animal.color + " " + animal.type);
+					console.log(animal.name + " the " + animal.color + " " + animal.type + ' is a ' + animal.size + '-sized animal.' );
 				});
 				// close db connection:
 				db.close(function () {
