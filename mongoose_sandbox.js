@@ -38,8 +38,9 @@ db.once('open', function () {
 	});
 
 	//Create custom static method:
-	AnimalSchema.statics.findSmall = function(callback) {
-		return this.find({size: 'small'}, callback);
+	AnimalSchema.statics.findSize = function(size, callback) {
+		//this refers to model:
+		return this.find({size: size}, callback);
 	}
 
 	//create model based on schema, first param is name (traditionally plural, maps to document in database), second is schema
@@ -96,7 +97,7 @@ db.once('open', function () {
 		Animal.create(animalData, function (err, animals) {
 			if (err) console.error('Save Failed', err);
 			//query the db:
-			Animal.findSmall(function(err, animals) {
+			Animal.findSize('medium', function(err, animals) {
 				animals.forEach(function(animal) {
 					console.log(animal.name + " the " + animal.color + " " + animal.type + ' is a ' + animal.size + '-sized animal.' );
 				});
