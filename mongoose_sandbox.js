@@ -22,7 +22,7 @@ db.once('open', function () {
 	var AnimalSchema = new Schema({
 		type: {type: String, default: 'goldfish'},
 		color: {type: String, default: 'golden'},
-		size: {type: String, default: 'small'},
+		size: String,
 		mass: {type: Number, default: 0.007 },
 		name: {type: String, default: 'Angela'}
 	});
