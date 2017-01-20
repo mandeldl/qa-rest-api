@@ -20,7 +20,12 @@ var QuestionSchema = new Schema({
 
 QuestionSchema.pre('save', function (next) {
 	//sort answers array before calling next
-	this.answers.sort(function(a,b){ return a.votes-b.votes; });
+	this.answers.sort(function(a,b){ 
+		if (a.votes === b.votes) {
+			return b.updatedAt - a.updatedAt;
+		}
+		return b.votes-a.votes;
+	});
 	next();
 })
 
