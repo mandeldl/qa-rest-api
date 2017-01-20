@@ -27,6 +27,19 @@ db.once('open', function () {
 		name: {type: String, default: 'Angela'}
 	});
 
+	//Create custom pre-hook for the save function:
+	AnimalScheme.pre('save', function(next){
+		//this refers to document being saved:
+		if (this.mass >= 100) {
+			this.size = 'big';
+		} else if (this.mass >=5 && this.mass < 100) {
+			this.size = 'medium';
+		} else {
+			this.size = 'small';
+		}
+		next();
+	});
+
 	//create model based on schema, first param is name (traditionally plural, maps to document in database), second is schema
 	var Animal = mongoose.model('Animals', AnimalSchema);
 
