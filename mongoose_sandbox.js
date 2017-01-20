@@ -78,22 +78,16 @@ db.once('open', function () {
 		if (err) console.error(err);
 		//save after clearing:
 		//have to save it, but it's asynchronous, so pass callback:
-		elephant.save(function (err) {
+		Animal.create(animalData, function (err, animals) {
 			if (err) console.error('Save Failed', err);
-			animal.save(function (err) {
-				if (err) console.error('Save Failed', err);
-				whale.save(function (err) {
-					if (err) console.error('Save Failed', err);
-					//query the db:
-					Animal.find({size: 'big'}, function(err, animals) {
-						animals.forEach(function(animal) {
-							console.log(animal.name + " the " + animal.color + " " + animal.type);
-						});
-						// close db connection:
-						db.close(function () {
-							console.log('db closed');
-						});
-					});
+			//query the db:
+			Animal.find({size: 'big'}, function(err, animals) {
+				animals.forEach(function(animal) {
+					console.log(animal.name + " the " + animal.color + " " + animal.type);
+				});
+				// close db connection:
+				db.close(function () {
+					console.log('db closed');
 				});
 			});
 	 	});
