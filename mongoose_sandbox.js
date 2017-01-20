@@ -43,6 +43,12 @@ db.once('open', function () {
 		return this.find({size: size}, callback);
 	}
 
+	//Create custom instance method:
+	AnimalSchema.methods.findSameColor = function(callback){
+		//this refers to document
+		return this.model('Animals').find({color: this.color}, callback);
+	}
+
 	//create model based on schema, first param is name (traditionally plural, maps to document in database), second is schema
 	var Animal = mongoose.model('Animals', AnimalSchema);
 
@@ -50,7 +56,7 @@ db.once('open', function () {
 	var elephant = new Animal({
 		type: 'elephant',
 		size: 'big',
-		color: 'grey',
+		color: 'gray',
 		mass: 6000,
 		name: 'Lawrence'
 	});
@@ -97,13 +103,16 @@ db.once('open', function () {
 		Animal.create(animalData, function (err, animals) {
 			if (err) console.error('Save Failed', err);
 			//query the db:
-			Animal.findSize('medium', function(err, animals) {
-				animals.forEach(function(animal) {
-					console.log(animal.name + " the " + animal.color + " " + animal.type + ' is a ' + animal.size + '-sized animal.' );
-				});
-				// close db connection:
-				db.close(function () {
-					console.log('db closed');
+			Animal.findOne({type: 'elephant'}, function(err, elephant) {
+				elephant.findSameColor(function (err, animals) {
+					if (err) console.error(err);
+					animals.forEach(function(animal) {
+						console.log(animal.name + " the " + animal.color + " " + animal.type + ' is a ' + animal.size + '-sized animal.' );
+					});
+					// close db connection:
+					db.close(function () {
+						console.log('db closed');
+					});
 				});
 			});
 	 	});
