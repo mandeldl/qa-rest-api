@@ -11,6 +11,23 @@ var jsonParser = require('body-parser').json;
 app.use(logger('dev'));
 
 app.use(jsonParser());
+
+// Mongoose DB:
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/qa');
+var db = mongoose.connection;
+
+// listen for events on mongoose connection:
+db.on('error', function (err) {
+	console.error('connection:', err);
+});
+
+// Console to confirm connection:
+db.once('open', function () {
+	console.log('db connection successful');
+});
+
+
 app.use('/questions', routes);
 
 // Catch 404 and forward to error handler
