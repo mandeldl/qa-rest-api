@@ -50,6 +50,29 @@ db.once('open', function () {
 		//notice no color, so take default.
 	});
 
+	//create an array of js object to save:
+	var animalData = [{
+		type: 'mouse',
+		color: 'gray',
+		mass: 0.035,
+		name: 'Marvin'
+	}, {
+		type: 'nutria',
+		color: 'brown',
+		mass: 6.35,
+		name: 'Gretchen'
+	}, {
+		type: 'wolf',
+		color: 'gray',
+		mass: 45,
+		name: 'Iris'
+	},
+	//We can also just add instances created using the Animal model:
+	elephant,
+	animal,
+	whale
+	];
+
 	//Clear database (passing empty object, otherwise pass a query object):
 	Animal.remove({}, function (err) {
 		if (err) console.error(err);
