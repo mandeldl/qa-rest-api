@@ -18,6 +18,16 @@ router.param('qID', function(req, res, next, id) {
 	});
 });
 
+router.param('aID', function(req, res, next, id) {
+	req.answer = req.question.answers.id(id); //returns subdocument with matching id.
+	if (!req.answer) {
+		err = new Error('Not Found!');
+		err.status = 404; //write not found status code
+		return next(err);
+	}
+	next();
+});
+
 
 //GET /questions
 // Route for questions collection
@@ -79,11 +89,11 @@ router.post('/:qID/answers', function(req, res, next){
 		res.json(question); // send question back to client
 	});
 	//Return all the questions
-	res.json({
-		response: "You sent me a POST request to/answers",
-		questionId: req.params.qID,
-		body: req.body
-	});
+	// res.json({
+	// 	response: "You sent me a POST request to/answers",
+	// 	questionId: req.params.qID,
+	// 	body: req.body
+	// });
 });
 
 // Put /questions/:qID/answers/:qID
