@@ -29,12 +29,18 @@ router.get('/', function(req, res, next){
 
 //POST /questions
 // Route for creating questions
-router.post('/', function(req, res){
-	//Return all the questions
-	res.json({
-		response: "You sent me a POST request",
-		body: req.body
+router.post('/', function(req, res, next) {
+	var question = new Question(req.body);  //create new question using Schema
+	question.save(function(err, question) {
+		if (err) return next(err);
+		res.status(201); //save successful status code
+		res.json(question); // send question back to client
 	});
+	//Return all the questions
+	// res.json({
+	// 	response: "You sent me a POST request",
+	// 	body: req.body
+	// });
 });
 
 //GET /questions/:qID
