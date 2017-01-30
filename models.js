@@ -22,7 +22,7 @@ AnswerSchema.method('vote', function(vote, callback){
 	if (vote === 'up') {
 		this.votes += 1;
 	} else {
-		this.votes -=1;
+		this.votes -= 1;
 	}
 	this.parent().save(callback);
 });
