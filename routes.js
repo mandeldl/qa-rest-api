@@ -9,16 +9,22 @@ var Question = require('.models').Question;  //import Question schema
 // Route for questions collection
 router.get('/', function(req, res, next){
 	//Return all the questions:
-	//pass empty object to find, return everything
+	//pass empty object to find, return all the documents
 	//2nd param is a 'projection' in Mongoose, returns partial documents (null if we don't want)
 	//3rd param is options object with sort selected based on createdAt value, descending order
 	//4th param is callback with error and array of documents
-	Question.find({}, null, { sort: { createdAt:-1 } } function(err, questions){
-		if (err) return next(err);
-		//because we're getting JS objects back from Mongo, we can call json on the response object:
-		res.json(questions);
-	});
-	res.json({response: "You sent me a GET request"});
+	//Question.find({}, null, {sort: {createdAt:-1}}, function(err, questions) {});
+
+	// Alternative is chaining query methods together and then calling exec with the callback:
+	Question.find({})
+		.sort({createdAt:-1 })
+		.exec(function(err, questions){
+			if (err) return next(err);
+			//because we're getting JS objects back from Mongo, we can call json on the response object:
+			res.json(questions);
+		});
+
+	// res.json({response: "You sent me a GET request"});
 });
 
 //POST /questions
