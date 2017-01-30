@@ -45,11 +45,15 @@ router.post('/', function(req, res, next) {
 
 //GET /questions/:qID
 // Route for specific question
-router.get('/:qID', function(req, res){
-	//Return all the questions
-	res.json({
-		response: "You sent me a GET request for ID " + req.params.qID
+router.get('/:qID', function(req, res, next){
+	Question.findById(req.params.qID, function(err, doc) {
+		if (err) return next(err);
+		res.send(doc);
 	});
+	//Return all the questions
+	// res.json({
+	// 	response: "You sent me a GET request for ID " + req.params.qID
+	// });
 });
 
 //POST /questions/:qID/answers
