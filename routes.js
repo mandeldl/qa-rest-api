@@ -4,6 +4,20 @@ var express = require('express');
 var router = express.Router();
 var Question = require('.models').Question;  //import Question schema
 
+//built-in method on router to check for a param:
+router.param('qID', function(req, res, next, id) {
+	Question.findById(id, function(err, doc) {
+		if (err) return next(err);
+		if (!doc) {
+			err = new Error('Not Found!');
+			err.status = 404; //write not found status code
+			return next(err);
+		}
+		req.question = doc;  //now we can just set the document retrieved as the question value on the request object and pass along to next middleware:
+		return next();
+	});
+});
+
 
 //GET /questions
 // Route for questions collection
@@ -46,10 +60,8 @@ router.post('/', function(req, res, next) {
 //GET /questions/:qID
 // Route for specific question
 router.get('/:qID', function(req, res, next){
-	Question.findById(req.params.qID, function(err, doc) {
-		if (err) return next(err);
-		res.send(doc);
-	});
+	//Already handled via param method on router, req.params.qid becomes req.question with response
+	res.send(req.question);
 	//Return all the questions
 	// res.json({
 	// 	response: "You sent me a GET request for ID " + req.params.qID
@@ -58,7 +70,14 @@ router.get('/:qID', function(req, res, next){
 
 //POST /questions/:qID/answers
 // Route for creating an answer for a specific question
-router.post('/:qID/answers', function(req, res){
+router.post('/:qID/answers', function(req, res, next){
+	//Already handled via param method on router
+	req.question.answers.push(req.body);  //Question Schema has an array value for answers.
+	req.question.save(function(err, question) {
+		if (err) return next(err);
+		res.status(201); //save successful status code
+		res.json(question); // send question back to client
+	});
 	//Return all the questions
 	res.json({
 		response: "You sent me a POST request to/answers",
