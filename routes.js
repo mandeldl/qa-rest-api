@@ -120,11 +120,11 @@ router.delete('/:qID/answers/:aID', function (req, res, next) {
 			res.json(question);
 		});
 	});
-	res.json({
-		response: "You sent me a DELETE request to/answers",
-		questionId: req.params.qID,
-		answerId: req.params.aID
-	});
+	// res.json({
+	// 	response: "You sent me a DELETE request to/answers",
+	// 	questionId: req.params.qID,
+	// 	answerId: req.params.aID
+	// });
 });
 
 // Post /questions/:qID/answers/:aID/vote-up
