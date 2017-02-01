@@ -130,22 +130,30 @@ router.delete('/:qID/answers/:aID', function (req, res, next) {
 // Post /questions/:qID/answers/:aID/vote-up
 // Post /questions/:qID/answers/:aID/vote-down
 // Vote on a specific answer
-router.post('/:qID/answers/:aID/vote-:dir', function (req, res, next) {
+router.post('/:qID/answers/:aID/vote-:dir', 
+	function (req, res, next) {
 		if (req.params.dir.search(/^(up|down)$/) === -1) {
 		//error-handling using RegEx
 			var err = new Error('Not Found');
 			err.status = 404;
 			next(err);
 		} else {
-			console.log('whoop');
+			req.vote = req.params.dir;
+			next();
 		}
-	}, function (req, res) {
-	res.json({
-		response: "You sent me a POST request to/vote-" + req.params.dir,
-		questionId: req.params.qID,
-		answerId: req.params.aID,
-		vote: req.params.dir
-	});
+	},
+	function (req, res, next) {
+		//call the AnswerSchema vote method with that direction passed in
+		req.answer.vote(req.vote, function(err, question){
+			if (err) return next(err);
+			res.json(question);
+		}); 
+		// res.json({
+		// 	response: "You sent me a POST request to/vote-" + req.params.dir,
+		// 	questionId: req.params.qID,
+		// 	answerId: req.params.aID,
+		// 	vote: req.params.dir
+		// });
 });
 
 
