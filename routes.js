@@ -2,7 +2,7 @@
 
 var express = require('express');
 var router = express.Router();
-var Question = require('.models').Question;  //import Question schema
+var Question = require('./models').Question;  //import Question schema
 
 //built-in method on router to check for a param:
 router.param('qID', function(req, res, next, id) {
